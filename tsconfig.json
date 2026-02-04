@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2018", // 编译目标，兼容大部分环境
+    "module": "ESNext", // 模块系统，适配rollup
+    "moduleResolution": "bundler", // Node模块解析
+    "outDir": "./dist", // 编译输出目录
+    "rootDir": "./src", // 源码根目录
+    "strict": true, // 严格模式（必开，类型安全）
+    "esModuleInterop": true, // 兼容CommonJS/ES模块
+    "skipLibCheck": true, // 跳过第三方库类型检查
+    "forceConsistentCasingInFileNames": true, // 强制文件名大小写一致
+    "declaration": true, // 生成.d.ts类型声明文件
+    "declarationDir": "./dist/types", // 类型声明输出目录
+    "sourceMap": true, // 生成sourceMap，方便调试
+    "removeComments": true, // 移除注释
+    "experimentalDecorators": true
+  },
+  "include": ["./src/**/*"], // 包含源码
+  "exclude": ["./node_modules", "./dist", "./test"] // 排除目录
+}

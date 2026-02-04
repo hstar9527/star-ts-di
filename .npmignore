@@ -1,0 +1,14 @@
+# 目录
+node_modules/
+src/
+test/
+# 文件
+*.ts
+*.map
+rollup.config.ts
+jest.config.ts
+tsconfig.json
+.eslintrc.cjs
+.prettierrc
+.gitignore
+.npmrc
