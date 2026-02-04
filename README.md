@@ -2,7 +2,6 @@
 
 
 **star-ts-di** is a lightweight dependency injection library for TypeScript.
-                        |
 
 ## Quick Start
 
