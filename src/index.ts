@@ -122,10 +122,17 @@ class EnvConfigService implements IConfigService {
     }
 }
 
+class Hxxtest {
+    test() {
+        console.log('test')
+    }
+}
+
 // 主应用类，依赖上面两个服务
 class MyApp {
     constructor(
         @ILogService private log: ILogService,
+        private hxxtest: Hxxtest,
         @IConfigService private config: IConfigService
     ) { }
 
