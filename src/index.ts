@@ -124,7 +124,7 @@ class EnvConfigService implements IConfigService {
 
 class Hxxtest {
     test() {
-        console.log('test')
+        console.log('test1')
     }
 }
 
