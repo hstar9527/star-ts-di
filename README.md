@@ -6,7 +6,7 @@
 ## Quick Start
 
 ```ts
-/ 定义日志服务接口
+// Define the log service interface
 interface ILogService {
     log(msg: string): void;
 }
@@ -14,14 +14,14 @@ interface ILogService {
 // 创建日志服务的“身份证”（装饰器 + ID）
 const ILogService = createDecorator<ILogService>('log');
 
-// 实现日志服务
+// Implement the log service interface
 class ConsoleLogService implements ILogService {
     log(msg: string) {
         console.log(`[LOG] ${msg}`);
     }
 }
 
-// 定义配置服务
+// Define configuration service
 interface IConfigService {
     get(key: string): string;
 }
@@ -34,7 +34,7 @@ class EnvConfigService implements IConfigService {
     }
 }
 
-// 主应用类，依赖上面两个服务
+// The main application class depends on the above two services
 class MyApp {
     constructor(
         @ILogService private log: ILogService,
@@ -47,20 +47,20 @@ class MyApp {
     }
 }
 
-// 1. 创建服务注册表
+// 1. Create a service registry
 const services = new ServiceCollection();
 
-// 2. 注册服务实现
+// 2. register service implementation
 services.set(ILogService, ConsoleLogService);
 services.set(IConfigService, EnvConfigService);
 
-// 3. 创建 DI 容器
+// 3. Create a di container
 const di = new InstantiationService(services);
 
-// 4. 创建 MyApp 实例（自动注入依赖！）
+// 4. get a MyApp instance（自动注入依赖！）
 const app = di.createInstance(MyApp);
 
-// 5. 运行
+// 5. run
 app.run();
 ```
 
