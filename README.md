@@ -11,7 +11,7 @@ interface ILogService {
     log(msg: string): void;
 }
 
-// 创建日志服务的“身份证”（装饰器 + ID）
+// Create the "identity card" (decorator + ID) for the log service
 const ILogService = createDecorator<ILogService>('log');
 
 // Implement the log service interface
