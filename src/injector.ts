@@ -1,4 +1,5 @@
-import { Dependency } from "./dependencyCollection";
+import { getDependencies } from "./decorators";
+import { Dependency, DependencyCollection, ResolvedDependencyCollection } from "./dependencyCollection";
 import { DependencyIdentifier } from "./dependencyIdentifier";
 import { IDisposable } from "./dispose";
 import { StarDiError } from "./error";
@@ -30,7 +31,8 @@ export class Injector implements IDisposable {
     constructor(
         dependencies?: Dependency[],
     ) {
-        console.log(dependencies)
+        this.dependencyCollection = new DependencyCollection(dependencies || []);
+        this.resolvedDependencyCollection = new ResolvedDependencyCollection();
     }
 
     get<T>(id: DependencyIdentifier<T>): T | null {
@@ -44,33 +46,32 @@ export class Injector implements IDisposable {
         if (cachedResult !== NotInstantiatedSymbol) {
             return cachedResult;
         }
+        const thing = this.createDependency(id);
+        this.resolvedDependencyCollection.add(id, thing);
+        return thing;
+    }
+    private _getValue<T>(id: DependencyIdentifier<T>): T | null | typeof NotInstantiatedSymbol {
+        if (this.resolvedDependencyCollection.has(id)) {
+            return this.resolvedDependencyCollection.get(id);
+        }
+        return NotInstantiatedSymbol;
     }
 
-    private _getValue<T>(id: DependencyIdentifier<T>): T | null {
-        // if (
-        //     this.dependencyCollection.has(id) &&
-        //     !this.resolvedDependencyCollection.has(id)
-        // ) {
-        //     return NotInstantiatedSymbol;
-        // }
-
-        // return this.resolvedDependencyCollection.get(id, quantity);
-        // const cachedResult = this.getValue(id);
-        // if (cachedResult !== NotInstantiatedSymbol) {
-        //     return cachedResult;
-        // }
-        // return this.createDependency(id);
-        return null;
+    private createDependency<T>(id: DependencyIdentifier<T>): T | null {
+        const registrations = this.dependencyCollection.get(id)!;
+        console.log(registrations)
+        const Ctor = registrations.useClass;
+        //查找构造器需要被注入的依赖
+        const declaredDependencies = getDependencies(Ctor)
+            .sort((a, b) => a.paramIndex - b.paramIndex);
+        //存储构造器所需参数
+        const resolvedArgs: any[] = [];
+        for (const dep of declaredDependencies) {
+            const thing = this._get(dep as any)
+            resolvedArgs.push(thing);
+        }
+        return new Ctor(...resolvedArgs);
     }
-
-    // see if the dependency can be instantiated by itself or its parent
-    // const shouldCache = !withNew;
-    // return this.createDependency(id, quantity, lookUp, shouldCache) as
-    // | T[]
-    // | T
-    // | AsyncHook<T>
-    // | null;
-
 
     dispose(): void {
         throw new Error("Method not implemented.");
@@ -82,9 +83,6 @@ export class Injector implements IDisposable {
         }
 
     }
-
-
-
 }
 
 class InjectorAlreadyDisposedError extends StarDiError {

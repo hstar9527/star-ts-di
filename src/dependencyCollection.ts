@@ -1,6 +1,6 @@
 import { DependencyIdentifier } from "./dependencyIdentifier";
 import { Ctor, DependencyItem } from "./dependencyItem";
-import { IDisposable } from "./dispose";
+import { IDisposable, isDisposable } from "./dispose";
 
 export type DependencyClass<T> = [Ctor<T>];
 
@@ -31,8 +31,45 @@ export class DependencyCollection implements IDisposable {
         this.dependencyMap.set(ctorOrId, val);
     }
 
+    get<T>(
+        id: DependencyIdentifier<T>,
+    ): DependencyItem<T> | null {
+        return this.dependencyMap.get(id)!;
+    }
+
     dispose(): void {
         throw new Error("Method not implemented.");
+    }
+
+}
+
+export class ResolvedDependencyCollection implements IDisposable {
+
+    private readonly resolvedDependencies = new Map<
+        DependencyIdentifier<any>,
+        any
+    >();
+
+    add<T>(id: DependencyIdentifier<T>, val: T | null): void {
+        this.resolvedDependencies.set(id, val);
+    }
+
+    has<T>(id: DependencyIdentifier<T>): boolean {
+        return this.resolvedDependencies.has(id);
+    }
+
+    get<T>(
+        id: DependencyIdentifier<T>,
+    ): T | null {
+        return this.resolvedDependencies.get(id);
+    }
+
+    dispose(): void {
+        Array.from(this.resolvedDependencies.values()).forEach((items) => {
+            items.forEach((item: any) => isDisposable(item) ? item.dispose() : void 0);
+        });
+
+        this.resolvedDependencies.clear();
     }
 
 }

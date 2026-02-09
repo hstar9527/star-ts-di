@@ -1,3 +1,4 @@
+export * from './injector'
 // =============== 【1. 装饰器工厂】===============
 const serviceIds = new Map<string, Function>();
 
