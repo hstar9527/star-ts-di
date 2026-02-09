@@ -29,6 +29,9 @@ export default defineConfig([
       commonjs(), // 转换CommonJS为ESModule
       typescript({
         tsconfig: './tsconfig.json',
+        compilerOptions: {
+          outDir: './dist',
+        },
       }), // 编译TS（使用tsconfig.json配置）
       terser(), // 压缩代码（生产包）
     ],
