@@ -48,7 +48,8 @@
     "typescript": "^5.4.4"
   },
   "scripts": {
-    "run:ts": "tsx src/index.ts",
+    "index:test": "tsx src/index.ts",
+    "core:test": "tsx src/__tests__/core.spec.ts",
     "clean": "rimraf dist",
     "build": "pnpm clean && rollup -c",
     "test": "jest",

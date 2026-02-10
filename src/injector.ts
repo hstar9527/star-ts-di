@@ -31,7 +31,6 @@ export class Injector implements IDisposable {
     constructor(
         dependencies?: Dependency[],
     ) {
-        console.log('injector')
         this.dependencyCollection = new DependencyCollection(dependencies || []);
         this.resolvedDependencyCollection = new ResolvedDependencyCollection();
     }
@@ -60,7 +59,6 @@ export class Injector implements IDisposable {
 
     private createDependency<T>(id: DependencyIdentifier<T>): T | null {
         const registrations = this.dependencyCollection.get(id)!;
-        console.log(registrations)
         const Ctor = registrations.useClass;
         //查找构造器需要被注入的依赖
         const declaredDependencies = getDependencies(Ctor)
