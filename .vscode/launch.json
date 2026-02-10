@@ -17,7 +17,7 @@
       "request": "launch",
       "name": "tsx测试",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["tsx:test"],
+      "runtimeArgs": ["core:test"],
       "skipFiles": ["<node_internals>/**"]
     }
   ]

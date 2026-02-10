@@ -15,7 +15,7 @@ class MyService {
   constructor(@ILogger private logger: ILogger) { }
 }
 
-const injector = new Injector([[ILogger, { useClass: ConsoleLogger }]]);
+const injector = new Injector([[ILogger, { useClass: ConsoleLogger }], [MyService]]);
 
 const myService = injector.get(MyService)
 
