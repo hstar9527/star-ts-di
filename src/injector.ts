@@ -66,7 +66,7 @@ export class Injector implements IDisposable {
         //存储构造器所需参数
         const resolvedArgs: any[] = [];
         for (const dep of declaredDependencies) {
-            const thing = this._get(dep as any)
+            const thing = this._get(dep.identifier as any)
             resolvedArgs.push(thing);
         }
         return new Ctor(...resolvedArgs);

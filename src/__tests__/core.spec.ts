@@ -1,5 +1,4 @@
-import { createIdentifier } from "../decorators";
-import { Injector } from "../injector";
+import { Injector, createIdentifier } from "../index";
 
 interface ILogger {
   log(message: string): void;
@@ -13,10 +12,15 @@ class ConsoleLogger implements ILogger {
 
 class MyService {
   constructor(@ILogger private logger: ILogger) { }
+
+  log() {
+    this.logger.log('MyService logging...');
+  }
 }
 
 const injector = new Injector([[ILogger, { useClass: ConsoleLogger }], [MyService]]);
 
 const myService = injector.get(MyService)
 
-console.log('myService', myService)
+// console.log('myService', myService)
+myService?.log()
