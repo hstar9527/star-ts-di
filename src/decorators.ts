@@ -44,11 +44,11 @@ export function createIdentifier<T>(id: string): IdentifierDecorator<T> {
         return cachedIdentifiers.get(id)!;
     }
 
-    const decorator = (<any>(
+    const decorator = (
         function (registerTarget: Ctor<T>, _key: string, index: number): void {
             setDependency(registerTarget, decorator, index);
         }
-    )) as IdentifierDecorator<T>;
+    ) as IdentifierDecorator<T>;
 
     decorator.decoratorName = id;
     decorator.toString = () => decorator.decoratorName;

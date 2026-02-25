@@ -18,4 +18,13 @@ export interface IdentifierDecorator<T> {
     type: T;
 }
 
+/**
+ * // Class as identifier
+ * class MyService {}
+ * injector.get(MyService);
+ * 
+ * // IdentifierDecorator for interfaces
+ * const ILogger = createIdentifier<ILogger>('ILogger');
+ * injector.get(ILogger);
+ */
 export type DependencyIdentifier<T> = Ctor<T> | IdentifierDecorator<T>;
