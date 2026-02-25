@@ -1,67 +1,37 @@
 # star-ts-di
 
-
 **star-ts-di** is a lightweight dependency injection library for TypeScript.
 
 ## Quick Start
 
 ```ts
-// Define the log service interface
-interface ILogService {
-    log(msg: string): void;
+import { Injector, createIdentifier } from '../index';
+
+interface ILogger {
+  log(message: string): void;
 }
 
-// Create the "identity card" (decorator + ID) for the log service
-const ILogService = createDecorator<ILogService>('log');
+const ILogger = createIdentifier<ILogger>('ILogger');
 
-// Implement the log service interface
-class ConsoleLogService implements ILogService {
-    log(msg: string) {
-        console.log(`[LOG] ${msg}`);
-    }
+class ConsoleLogger implements ILogger {
+  log(message: string) {
+    console.log('ConsoleLogger实现', message);
+  }
 }
 
-// Define configuration service
-interface IConfigService {
-    get(key: string): string;
+class MyService {
+  constructor(@ILogger private logger: ILogger) {}
+
+  log() {
+    this.logger.log('MyService logging...');
+  }
 }
 
-const IConfigService = createDecorator<IConfigService>('config');
+const injector = new Injector([[ILogger, { useClass: ConsoleLogger }], [MyService]]);
 
-class EnvConfigService implements IConfigService {
-    get(key: string) {
-        return process.env[key] || 'default';
-    }
-}
+const myService = injector.get(MyService);
 
-// The main application class depends on the above two services
-class MyApp {
-    constructor(
-        @ILogService private log: ILogService,
-        @IConfigService private config: IConfigService
-    ) { }
-
-    run() {
-        this.log.log('App started!');
-        this.log.log(`DB_HOST = ${this.config.get('DB_HOST')}`);
-    }
-}
-
-// 1. Create a service registry
-const services = new ServiceCollection();
-
-// 2. register service implementation
-services.set(ILogService, ConsoleLogService);
-services.set(IConfigService, EnvConfigService);
-
-// 3. Create a di container
-const di = new InstantiationService(services);
-
-// 4. get a MyApp instance（自动注入依赖！）
-const app = di.createInstance(MyApp);
-
-// 5. run
-app.run();
+myService?.log();
 ```
 
 ## License

@@ -22,5 +22,4 @@ const injector = new Injector([[ILogger, { useClass: ConsoleLogger }], [MyServic
 
 const myService = injector.get(MyService)
 
-// console.log('myService', myService)
 myService?.log()
